@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellocloud-v1
+  labels:
+    app: hc-v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hellocloud
+  template:
+    metadata:
+      labels:
+        app: hellocloud
+    spec:
+      containers:
+      - name: cnfp1
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:7070"
+        - "-text=Welcome to cnfp1-v1"
+      - name: cnfp2
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:8080"
+        - "-text=Welcome to cnfp2-v1"
+      - name: cnfp3
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:9090"
+        - "-text=Welcome to cnfp3-v1"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellocloud-v2
+  labels:
+    app: hc-v2S
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hellocloud
+  template:
+    metadata:
+      labels:
+        app: hellocloud
+    spec:
+      containers:
+      - name: cnfp1
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:7070"
+        - "-text=Welcome to cnfp1-v2"
+      - name: cnfp2
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:8080"
+        - "-text=Welcome to cnfp2-v2"

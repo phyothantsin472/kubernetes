@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellocloud-assignment2
+  labels:
+    app: hc
+spec:
+  type: ClusterIP
+  selector:
+    app: hellocloud
+  ports:
+    - name: ncfp1-port
+      port: 7777
+      protocol: TCP
+      targetPort: 7070
+    - name: ncfp2-port
+      port: 8888
+      protocol: TCP
+      targetPort: 8080
+    - name: ncfp3-port
+      port: 9999
+      protocol: TCP
+      targetPort: 9090
