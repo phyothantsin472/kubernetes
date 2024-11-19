@@ -1,0 +1,10 @@
+1. apply blue-green-deployment.yaml
+2.run following command to run dnstools
+kubectl exec -it pods/dnstools -- sh
+3.call the service
+curl http-echo-service:80/blue
+curl http-echo-service:80/green
+return Welcome to Blue  from both
+4. change in service following  and then run step2,3 again
+version: blue -> version: green
+return Welcome to Green  from both

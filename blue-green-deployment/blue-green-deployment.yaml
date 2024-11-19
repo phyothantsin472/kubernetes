@@ -1,0 +1,87 @@
+# dns.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnstools
+  labels:
+    app: dnstools
+spec:
+  containers:
+  - name: dnstools
+    image: nginx:latest
+    command:
+    - sleep
+    - "3600"
+  restartPolicy: Always
+
+---
+#blue.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-echo-deployment-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: http-echo
+  template:
+    metadata:
+      labels:
+        name: http-echo
+        version: blue
+    spec:
+      containers:
+      - name: http-echo
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:8080"
+        - "-text=Welcome to Blue"
+        ports:
+        - containerPort: 80
+---
+#green.yaml 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-echo-deployment-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: http-echo
+  template:
+    metadata:
+      labels:
+        name: http-echo
+        version: green
+    spec:
+      containers:
+      - name: http-echo
+        image: hashicorp/http-echo
+        args:
+        - "-listen=:8080"
+        - "-text=Welcome to Green"
+        ports:
+        - containerPort: 80
+---
+#service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-echo-service
+  labels:
+    name: http-echo
+spec:
+  type: LoadBalancer
+  selector:
+    name: http-echo
+    version: blue
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.0.2.127
